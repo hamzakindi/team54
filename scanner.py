@@ -1,10 +1,6 @@
 import pandas as pd
 import os
-
-# Update these paths to match your setup
-CSV_DIRECTORY = "c:/Users/timba/Downloads/archive/MedHack AI Hospital/csv"
-# New output directory for Excel files
-OUTPUT_DIRECTORY = "c:/Users/timba/Downloads/archive/MedHack AI Hospital/patient_reports"
+from config import CSV_DIRECTORY, OUTPUT_DIRECTORY
 
 def export_to_excel(patient_data, patient_id):
     """
@@ -13,18 +9,16 @@ def export_to_excel(patient_data, patient_id):
     if not patient_data:
         print("No data to export")
         return
-    
-    # Create output directory if it doesn't exist
+
     os.makedirs(OUTPUT_DIRECTORY, exist_ok=True)
-        
     output_file = f"patient_{patient_id}_summary.xlsx"
     full_path = os.path.join(OUTPUT_DIRECTORY, output_file)
-    
+
     with pd.ExcelWriter(full_path) as writer:
         for category, data in patient_data.items():
             if isinstance(data, pd.DataFrame):
                 data.to_excel(writer, sheet_name=category[:31], index=False)
-    
+
     print(f"\nData exported to: {full_path}")
 
 # [Rest of the code remains the same...]
