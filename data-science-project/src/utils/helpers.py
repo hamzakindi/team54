@@ -1,6 +1,24 @@
-def plot_data_distribution(data):
+def plot_data_distribution(data, dataset_name=None):
+    """
+    Plot distribution of data features
+    
+    Args:
+        data: pandas DataFrame or dictionary of DataFrames
+        dataset_name (str): If data is a dict, specify dataset to plot
+    """
     import matplotlib.pyplot as plt
-    data.hist(bins=30, figsize=(10, 7))
+    
+    if isinstance(data, dict):
+        if dataset_name is None:
+            raise ValueError("dataset_name must be specified when passing a dictionary")
+        if dataset_name not in data:
+            raise KeyError(f"Dataset '{dataset_name}' not found")
+        df = data[dataset_name]
+    else:
+        df = data
+        
+    df.hist(bins=30, figsize=(10, 7))
+    plt.suptitle(f'Data Distribution - {dataset_name if dataset_name else ""}')
     plt.tight_layout()
     plt.show()
 

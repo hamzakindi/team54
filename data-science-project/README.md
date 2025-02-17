@@ -48,3 +48,16 @@ data-science-project
 ## License
 
 This project is licensed under the MIT License.
+
+# Best Practice
+## Create virtual environment
+python -m venv venv
+
+## Activate the environment
+.\venv\Scripts\activate
+
+## Deactivate the environment
+.\venv\Scripts\deactivate
+
+## Install requirements
+pip install -r requirements.txt
