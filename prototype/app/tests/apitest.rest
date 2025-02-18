@@ -1,0 +1,45 @@
+### Valid Test Case - High Risk
+POST http://localhost:3000/api/predict HTTP/1.1
+Content-Type: application/json
+
+{
+    "pregnancies": 6,
+    "glucose": 195,
+    "bloodPressure": 130,
+    "skinThickness": 40,
+    "insulin": 180,
+    "bmi": 37.2,
+    "diabetesPedigreeFunction": 0.6,
+    "age": 45
+}
+
+### Valid Test Case - Low Risk
+POST http://localhost:3000/api/predict HTTP/1.1
+Content-Type: application/json
+
+{
+    "pregnancies": 1,
+    "glucose": 85,
+    "bloodPressure": 66,
+    "skinThickness": 29,
+    "insulin": 100,
+    "bmi": 23.5,
+    "diabetesPedigreeFunction": 0.351,
+    "age": 31
+}
+
+### Edge Case - Minimum Values
+POST http://localhost:3000/api/predict HTTP/1.1
+Content-Type: application/json
+
+{
+    "pregnancies": 0,
+    "glucose": 0,
+    "bloodPressure": 0,
+    "skinThickness": 0,
+    "insulin": 0,
+    "bmi": 0,
+    "diabetesPedigreeFunction": 0,
+    "age": 0
+}
+
