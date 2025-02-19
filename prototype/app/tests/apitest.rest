@@ -43,3 +43,32 @@ Content-Type: application/json
     "age": 0
 }
 
+### test python server
+POST http://localhost:3000/api/predict
+Content-Type: application/json
+
+{
+    "pregnancies": 1,
+    "glucose": 103,
+    "bloodPressure": 30,
+    "skinThickness": 38,
+    "insulin": 83,
+    "bmi": 43.3,
+    "diabetesPedigreeFunction": 0.183,
+    "age": 33
+}
+
+### test python server
+POST http://localhost:8000/predict
+Content-Type: application/json
+
+{
+    "pregnancies": 1,
+    "glucose": 103,
+    "bloodPressure": 30,
+    "skinThickness": 38,
+    "insulin": 83,
+    "bmi": 43.3,
+    "diabetesPedigreeFunction": 0.183,
+    "age": 33
+}

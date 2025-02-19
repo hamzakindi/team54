@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { type NextRequest } from 'next/server';
 
+const EXTERNAL_API_URL = 'http://localhost:8000/predict';
+
 const constraints = {
   pregnancies: { min: 0, max: 20 },
   glucose: { min: 0, max: 500 },
@@ -64,25 +66,25 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Calculate risk score with validated input
-    let riskScore = 0;
-    
-    if (input.glucose > 140) riskScore += 0.3;
-    if (input.glucose > 200) riskScore += 0.2;
-    if (input.bmi > 30) riskScore += 0.2;
-    if (input.bmi > 35) riskScore += 0.1;
-    if (input.bloodPressure > 120) riskScore += 0.1;
-    if (input.age > 40) riskScore += 0.1;
-    if (input.insulin > 166) riskScore += 0.1;
-    if (input.skinThickness > 35) riskScore += 0.05;
-    if (input.diabetesPedigreeFunction > 0.5) riskScore += 0.15;
+    // Make call to external API
+    const externalResponse = await fetch(EXTERNAL_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(input)
+    });
 
-    const probability = Math.min(riskScore, 1);
-    const prediction = probability >= 0.5 ? 1 : 0;
+    if (!externalResponse.ok) {
+      const errorData = await externalResponse.json();
+      throw new Error(errorData.message || 'External API request failed');
+    }
+
+    const predictionData = await externalResponse.json();
 
     return NextResponse.json({
-      prediction,
-      probability: Number(probability.toFixed(3)),
+      prediction: predictionData.prediction,
+      probability: predictionData.probability,
       status: 'success'
     });
 
