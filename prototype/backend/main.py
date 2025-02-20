@@ -69,10 +69,12 @@ async def predict(data: PredictionInput):
         # Make prediction
         prediction = model.predict(input_data)
         probability = model.predict_proba(input_data)
-        
+        pred_class = int(prediction)
+        prob_value = float(probability[0][0]) if pred_class == 0 else float(probability[0][1])
+
         return {
-            "prediction": int(prediction[0]),
-            "probability": float(probability[0][1]),
+            "prediction": pred_class,
+            "probability": prob_value,
             "status": "success"
         }
     except Exception as e:

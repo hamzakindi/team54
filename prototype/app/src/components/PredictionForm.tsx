@@ -17,6 +17,7 @@ const initialFormData: DiabetesFormData = {
 export default function PredictionForm() {
   const [formData, setFormData] = useState<DiabetesFormData>(initialFormData);
   const [prediction, setPrediction] = useState<string>('');
+  const [probability, setProbability] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,9 +33,11 @@ export default function PredictionForm() {
       });
       const data: PredictionResponse = await response.json();
       setPrediction(data.prediction === 1 ? 'Positive' : 'Negative');
+      setProbability(data.probability);
     } catch (error) {
       console.error('Error:', error);
       setPrediction('Error occurred during prediction');
+      setProbability(0);
     } finally {
       setIsLoading(false);
     }
@@ -85,7 +88,10 @@ export default function PredictionForm() {
             : 'bg-green-100 text-green-800'
         }`}>
           <p className="text-center font-semibold">
-            Prediction result (rule based): {prediction}
+            Prediction result: {prediction}
+          </p>
+          <p className="text-center mt-2">
+            Probability: {(probability * 100).toFixed(1)}%
           </p>
         </div>
       )}

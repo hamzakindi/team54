@@ -43,32 +43,44 @@ Content-Type: application/json
     "age": 0
 }
 
+### Test Case - Custom Values
+POST http://localhost:3000/api/predict HTTP/1.1
+Content-Type: application/json
+
+{
+    "pregnancies": 5,
+    "glucose": 117,
+    "bloodPressure": 92,
+    "skinThickness": 0,
+    "insulin": 0,
+    "bmi": 34.1,
+    "diabetesPedigreeFunction": 0.337,
+    "age": 38
+}
+
+### Test Case - Dataset Values
+POST http://localhost:3000/api/predict HTTP/1.1
+Content-Type: application/json
+
+{
+    "pregnancies": 10,
+    "glucose": 125,
+    "bloodPressure": 70,
+    "skinThickness": 26,
+    "insulin": 115,
+    "bmi": 31.1,
+    "diabetesPedigreeFunction": 0.205,
+    "age": 41
+}
+
 ### next server
 POST http://localhost:3000/api/predict
 Content-Type: application/json
 
-{
-    "pregnancies": 1,
-    "glucose": 103,
-    "bloodPressure": 30,
-    "skinThickness": 38,
-    "insulin": 83,
-    "bmi": 43.3,
-    "diabetesPedigreeFunction": 0.183,
-    "age": 33
-}
+{"pregnancies":7,"glucose":196,"bloodPressure":90,"skinThickness":0,"insulin":0,"bmi":39.8,"diabetesPedigreeFunction":0.451,"age":41}
 
 ### python server
 POST http://localhost:8000/predict
 Content-Type: application/json
 
-{
-    "pregnancies": 1,
-    "glucose": 103,
-    "bloodPressure": 30,
-    "skinThickness": 38,
-    "insulin": 83,
-    "bmi": 43.3,
-    "diabetesPedigreeFunction": 0.183,
-    "age": 33
-}
+{"pregnancies":7,"glucose":196,"bloodPressure":90,"skinThickness":0,"insulin":0,"bmi":39.8,"diabetesPedigreeFunction":0.451,"age":41}

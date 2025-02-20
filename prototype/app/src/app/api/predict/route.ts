@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
     const predictionData = await externalResponse.json();
 
     return NextResponse.json({
-      prediction: predictionData.prediction,
+      prediction: Number(predictionData.prediction),
       probability: predictionData.probability,
       status: 'success'
     });
