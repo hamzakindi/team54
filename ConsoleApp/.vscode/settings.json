@@ -1,7 +1,0 @@
-{
-    "python.analysis.extraPaths": [
-        "c:\\Users\\humza\\.vscode\\extensions\\electropol-fr.microbit-explorer-0.2.5\\stubs-electropol-en\\lib",
-        "c:\\Users\\humza\\.vscode\\extensions\\electropol-fr.microbit-explorer-0.2.5\\stubs-electropol-en\\micropython",
-        "./# "
-    ]
-}
