@@ -14,6 +14,98 @@ const constraints = {
   age: { min: 0, max: 120 }
 };
 
+interface TestRecommendation {
+  name: string;
+  description: string;
+  normalRange: string;
+  priority: 'required' | 'recommended' | 'optional';
+}
+
+interface TestResponse {
+  category: string;
+  tests: TestRecommendation[];
+}
+
+function getTestRecommendations(probability: number): TestResponse {
+  const baseTests: TestRecommendation[] = [
+    {
+      name: "Fasting Blood Glucose (FBG)",
+      description: "Measures blood sugar levels after fasting for 8 hours",
+      normalRange: "70-99 mg/dL",
+      priority: "required"
+    },
+    {
+      name: "HbA1c",
+      description: "Reflects average blood glucose over past 2-3 months",
+      normalRange: "Below 5.7%",
+      priority: "required"
+    }
+  ];
+
+  if (probability < 0.3) {
+    return {
+      category: "LOW_RISK_TESTS",
+      tests: baseTests
+    };
+  }
+
+  const mediumRiskTests: TestRecommendation[] = [
+    ...baseTests,
+    {
+      name: "Oral Glucose Tolerance Test (OGTT)",
+      description: "Measures how well your body processes glucose",
+      normalRange: "Below 140 mg/dL after 2 hours",
+      priority: "required"
+    },
+    {
+      name: "Fasting Insulin Level",
+      description: "Measures insulin resistance",
+      normalRange: "3-25 mIU/L",
+      priority: "recommended"
+    },
+    {
+      name: "Lipid Profile",
+      description: "Measures different types of cholesterol",
+      normalRange: "Varies by component",
+      priority: "recommended"
+    }
+  ];
+
+  if (probability < 0.7) {
+    return {
+      category: "MEDIUM_RISK_TESTS",
+      tests: mediumRiskTests
+    };
+  }
+
+  const highRiskTests: TestRecommendation[] = [
+    ...mediumRiskTests,
+    {
+      name: "C-Peptide Test",
+      description: "Measures insulin production by pancreas",
+      normalRange: "0.5-2.0 ng/mL",
+      priority: "required"
+    },
+    {
+      name: "GAD Antibodies",
+      description: "Helps distinguish between type 1 and type 2 diabetes",
+      normalRange: "Below 5 IU/mL",
+      priority: "recommended"
+    },
+    {
+      name: "Microalbuminuria",
+      description: "Checks for kidney damage",
+      normalRange: "Below 30 mg/24 hours",
+      priority: "required"
+    }
+  ];
+
+  return {
+    category: "HIGH_RISK_TESTS",
+    tests: highRiskTests
+  };
+}
+
 export async function POST(request: NextRequest) {
   try {
     // Check if request has a body
@@ -85,6 +177,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       prediction: Number(predictionData.prediction),
       probability: predictionData.probability,
+      testRecommendations: getTestRecommendations(predictionData.probability),
       status: 'success'
     });
 
