@@ -2,12 +2,14 @@ import PredictionForm from '@/components/PredictionForm';
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-slate-50 py-12">
-      <div className="max-w-7xl mx-auto px-4">
-        <h1 className="text-4xl font-bold text-center mb-8 text-slate-900">
+    <main className="h-screen overflow-hidden bg-slate-50">
+      <div className="h-full max-w-7xl mx-auto px-4 py-6 flex flex-col">
+        <h1 className="text-4xl font-bold text-center mb-4 text-slate-900">
           Glucolife
         </h1>
-        <PredictionForm />
+        <div className="flex-1 min-h-0">
+          <PredictionForm />
+        </div>
       </div>
     </main>
   );
