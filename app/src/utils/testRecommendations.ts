@@ -10,82 +10,76 @@ export interface TestResponse {
   tests: TestRecommendation[];
 }
 
-const baseTests: TestRecommendation[] = [
-  {
-    name: "Fasting Blood Glucose (FBG)",
-    description: "Measures blood sugar levels after fasting for 8 hours",
-    normalRange: "70-99 mg/dL",
-    priority: "required"
-  },
-  {
-    name: "HbA1c",
-    description: "Reflects average blood glucose over past 2-3 months",
-    normalRange: "Below 5.7%",
-    priority: "required"
-  }
-];
+interface ApiResponse {
+  status: 'success' | 'error';
+  category: string;
+  tests: [string, string, string, string][]; // [name, description, normalRange, priority]
+}
 
-const mediumRiskTests: TestRecommendation[] = [
-  ...baseTests,
-  {
-    name: "Oral Glucose Tolerance Test (OGTT)",
-    description: "Measures how well your body processes glucose",
-    normalRange: "Below 140 mg/dL after 2 hours",
-    priority: "required"
-  },
-  {
-    name: "Fasting Insulin Level",
-    description: "Measures insulin resistance",
-    normalRange: "3-25 mIU/L",
-    priority: "recommended"
-  },
-  {
-    name: "Lipid Profile",
-    description: "Measures different types of cholesterol",
-    normalRange: "Varies by component",
-    priority: "recommended"
-  }
-];
+const RECOMMENDATIONS_API_URL = process.env.NEXT_PUBLIC_RECOMMENDATIONS_API_URL || 'http://localhost:8001/api/recommendations';
 
-const highRiskTests: TestRecommendation[] = [
-  ...mediumRiskTests,
-  {
-    name: "C-Peptide Test",
-    description: "Measures insulin production by pancreas",
-    normalRange: "0.5-2.0 ng/mL",
-    priority: "required"
-  },
-  {
-    name: "GAD Antibodies",
-    description: "Helps distinguish between type 1 and type 2 diabetes",
-    normalRange: "Below 5 IU/mL",
-    priority: "recommended"
-  },
-  {
-    name: "Microalbuminuria",
-    description: "Checks for kidney damage",
-    normalRange: "Below 30 mg/24 hours",
-    priority: "required"
-  }
-];
+// Convert snake_case to readable format
+function formatTestName(name: string): string {
+  return name
+    .split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
 
-export function getTestRecommendations(probability: number): TestResponse {
-  if (probability < 0.3) {
+export async function getTestRecommendations(probability: number): Promise<TestResponse> {
+  try {
+    // Validate probability
+    if (typeof probability !== 'number' || isNaN(probability) || probability < 0 || probability > 1) {
+      throw new Error('Probability must be a number between 0 and 1');
+    }
+
+    const response = await fetch(RECOMMENDATIONS_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ probability }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+    }
+
+    const data: ApiResponse = await response.json();
+    
+    // Add logging of raw API response
+    console.log('API Response:', JSON.stringify(data, null, 2));
+    
+    if (data.status !== 'success') {
+      throw new Error('API returned non-success status');
+    }
+    
+    // Transform API response to match TestResponse format
+    const transformedTests: TestRecommendation[] = data.tests.map(([name, description, normalRange, priority]) => ({
+      name: formatTestName(name),
+      description,
+      normalRange,
+      priority: priority.toLowerCase() as 'required' | 'recommended' | 'optional'
+    }));
+
+    // Log transformed response
+    console.log('Transformed Response:', JSON.stringify({
+      category: data.category,
+      tests: transformedTests
+    }, null, 2));
+
     return {
-      category: "LOW_RISK_TESTS",
-      tests: baseTests
+      category: data.category,
+      tests: transformedTests
     };
+  } catch (error) {
+    console.error('Error fetching test recommendations:', error);
+    if (error instanceof TypeError) {
+      throw new Error('Network or parsing error occurred');
+    } else if (error instanceof Response) {
+      throw new Error(`Server responded with status: ${error.status}`);
+    }
+    throw error instanceof Error ? error : new Error('Failed to fetch test recommendations');
   }
-
-  if (probability < 0.7) {
-    return {
-      category: "MEDIUM_RISK_TESTS",
-      tests: mediumRiskTests
-    };
-  }
-
-  return {
-    category: "HIGH_RISK_TESTS",
-    tests: highRiskTests
-  };
 }

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { type NextRequest } from 'next/server';
 import { getTestRecommendations } from '@/utils/testRecommendations';
 
-const EXTERNAL_API_URL = 'http://localhost:8000/predict';
+const EXTERNAL_API_URL = process.env.PREDICTION_API_URL || 'http://localhost:8000/predict';
 
 const constraints = {
   pregnancies: { min: 0, max: 20 },
@@ -83,10 +83,13 @@ export async function POST(request: NextRequest) {
 
     const predictionData = await externalResponse.json();
 
+    // Add await here
+    const recommendations = await getTestRecommendations(predictionData.probability);
+
     return NextResponse.json({
       prediction: Number(predictionData.prediction),
       probability: predictionData.probability,
-      testRecommendations: getTestRecommendations(predictionData.probability),
+      testRecommendations: recommendations,  // Use the awaited result
       status: 'success'
     });
 
