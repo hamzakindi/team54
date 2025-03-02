@@ -93,3 +93,27 @@ Content-Type: application/json
 ### 3,126,88,41,235,39.3,0.704,27,0
 ## Positive
 ## 7,196,90,0,0,39.8,0.451,41,1
+
+### Test Recommendations - Medium Risk
+POST http://localhost:8001/api/recommendations
+Content-Type: application/json
+
+{
+    "probability": 0.5
+}
+
+### Test Recommendations - Low Risk
+POST http://localhost:8001/api/recommendations
+Content-Type: application/json
+
+{
+    "probability": 0.2
+}
+
+### Test Recommendations - High Risk
+POST http://localhost:8001/api/recommendations
+Content-Type: application/json
+
+{
+    "probability": 0.8
+}

@@ -1,0 +1,1 @@
+curl -X POST -H "Content-Type: application/json" -d "{\"probability\": 0.5}" http://localhost:8000/api/recommendations
