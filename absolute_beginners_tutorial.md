@@ -1,22 +1,22 @@
-Step-by-Step Tutorial for Absolute Beginners
-Step 1: Introduction to the Tools
-Substep 1: Install Visual Studio Code (VSCode)
+# Step-by-Step Tutorial for Absolute Beginners ##
+## Step 1: Introduction to the Tools
+### Substep 1: Install Visual Studio Code (VSCode)
 
 Go to the VSCode download page.
 Download the installer for your operating system (Windows, macOS, or Linux).
 Run the installer and follow the on-screen instructions to complete the installation.
-Substep 2: Install Git
+### Substep 2: Install Git
 
 Go to the Git download page.
 Download the Git installer for your operating system.
 Run the installer and follow the on-screen instructions to complete the installation.
-Substep 3: Create a GitHub Account
+### Substep 3: Create a GitHub Account
 
 Go to the GitHub sign-up page.
 Fill in the required information to create your GitHub account.
 Verify your email address to complete the account creation process.
-Step 2: Setting Up the Repository
-Substep 1: Clone the Repository
+## Step 2: Setting Up the Repository
+### Substep 1: Clone the Repository
 
 Open a terminal or command prompt on your computer.
 Run the following command to clone the repository:
@@ -47,17 +47,17 @@ Guide on Basic Git Commands and How to Make a Commit
 Introduce basic Git commands like git status, git add, git commit, and git push.
 Provide a simple example of making a change to a file and committing the change.
 bash
-# Make a change to a file
+#### Make a change to a file
 echo "Hello, World!" > hello.txt
 
-# Check the status of the repository
+#### Check the status of the repository
 git status
 
-# Add the changed file to the staging area
+#### Add the changed file to the staging area
 git add hello.txt
 
-# Commit the change with a message
+#### Commit the change with a message
 git commit -m "Add hello.txt with greeting"
 
-# Push the change to the remote repository
+#### Push the change to the remote repository
 git push
